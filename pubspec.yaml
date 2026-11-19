@@ -20,5 +20,14 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
+    - assets/images/branding_icono_claro_wayspot.png
+    - assets/images/hidden.png
+    - assets/images/icon_google.png
+    - assets/images/lock.png
+    - assets/images/mail.png
+    - assets/images/person.png
+    - assets/images/post_card_machu_pichu.jpg
+    - assets/images/shield.png
+    - assets/images/splash_mountain_background.jpg
+    - assets/images/view.png
 

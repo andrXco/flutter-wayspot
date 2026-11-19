@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 
 class WayspotBottomBar extends StatelessWidget {
   final int selectedIndex;
+  final VoidCallback? onExploreTap;
   final VoidCallback? onNotificationsTap;
+  final VoidCallback? onHomeTap;
   final VoidCallback? onProfileTap;
 
   const WayspotBottomBar({
     super.key,
     required this.selectedIndex,
+    this.onExploreTap,
     this.onNotificationsTap,
+    this.onHomeTap,
     this.onProfileTap,
   });
 
@@ -17,12 +21,7 @@ class WayspotBottomBar extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(
-          top: BorderSide(
-            color: Color(0xFFDDE3DF),
-            width: 1,
-          ),
-        ),
+        border: Border(top: BorderSide(color: Color(0xFFDDE3DF), width: 1)),
       ),
       child: SafeArea(
         top: false,
@@ -32,10 +31,10 @@ class WayspotBottomBar extends StatelessWidget {
             children: [
               Expanded(
                 child: _WayspotNavItem(
-                  icon: Icons.search,
-                  label: 'Explorar',
+                  icon: selectedIndex == 0 ? Icons.map : Icons.map_outlined,
+                  semanticLabel: 'Mapa y exploración',
                   isSelected: selectedIndex == 0,
-                  onTap: () {},
+                  onTap: onExploreTap,
                 ),
               ),
               Expanded(
@@ -43,7 +42,7 @@ class WayspotBottomBar extends StatelessWidget {
                   icon: selectedIndex == 1
                       ? Icons.notifications
                       : Icons.notifications_none,
-                  label: 'Notificaciones',
+                  semanticLabel: 'Notificaciones',
                   isSelected: selectedIndex == 1,
                   onTap: onNotificationsTap,
                 ),
@@ -51,9 +50,9 @@ class WayspotBottomBar extends StatelessWidget {
               Expanded(
                 child: _WayspotNavItem(
                   icon: selectedIndex == 2 ? Icons.home : Icons.home_outlined,
-                  label: 'Inicio',
+                  semanticLabel: 'Inicio',
                   isSelected: selectedIndex == 2,
-                  onTap: () {},
+                  onTap: onHomeTap,
                 ),
               ),
               Expanded(
@@ -61,7 +60,7 @@ class WayspotBottomBar extends StatelessWidget {
                   icon: selectedIndex == 3
                       ? Icons.person
                       : Icons.person_outline,
-                  label: 'Perfil',
+                  semanticLabel: 'Perfil',
                   isSelected: selectedIndex == 3,
                   onTap: onProfileTap,
                 ),
@@ -76,34 +75,34 @@ class WayspotBottomBar extends StatelessWidget {
 
 class _WayspotNavItem extends StatelessWidget {
   final IconData icon;
-  final String label;
+  final String semanticLabel;
   final bool isSelected;
   final VoidCallback? onTap;
 
   const _WayspotNavItem({
     required this.icon,
-    required this.label,
+    required this.semanticLabel,
     required this.isSelected,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      selected: isSelected,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: Center(
+          child: Container(
             width: 52,
-            height: 30,
+            height: 42,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: isSelected
-                  ? const Color(0x4DBBD7B0)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(15),
+              color: isSelected ? const Color(0x4DBBD7B0) : Colors.transparent,
+              borderRadius: BorderRadius.circular(21),
             ),
             child: Icon(
               icon,
@@ -113,20 +112,7 @@ class _WayspotNavItem extends StatelessWidget {
                   : const Color(0xFF707773),
             ),
           ),
-          const SizedBox(height: 3),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: isSelected
-                  ? const Color(0xFF1F5D50)
-                  : const Color(0xFF707773),
-              fontSize: 11,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
